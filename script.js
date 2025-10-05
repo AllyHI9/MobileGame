@@ -261,6 +261,16 @@
     requestAnimationFrame(loop);
   }
 
+    // Make HUD text float gently up and down
+  const hud = document.getElementById("hud");
+  function animateHUD() {
+    const t = performance.now() * 0.0015;
+    const offset = Math.sin(t) * 5; // ±5px float
+    hud.style.transform = `translateY(${offset}px)`;
+    requestAnimationFrame(animateHUD);
+  }
+  animateHUD();
+
   generateLevel(level);
   requestAnimationFrame(loop);
 })();
