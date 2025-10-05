@@ -3,24 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Water Molecule Bubble Game</title>
+  <title>Water Molecule Popper</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- HUD (Level + Score + Logo) -->
   <div id="hud">
-  <div id="levelText" class="hudText">Level 1</div>
-  <img id="charityLogo" src="charity-water-logo-png_seeklogo-618081.png" alt="Charity Water Logo">
-  <div id="score" class="hudText">Score: 0</div>
-</div>
-
-  <div id="gameContainer">
-    <canvas id="gameCanvas"></canvas>
+    <div id="levelText" class="hudText">Level 1</div>
+    <img id="charityLogo" src="charity-water-logo-png_seeklogo-618081.png" alt="Charity Water Logo">
+    <div id="score" class="hudText">Score: 0</div>
   </div>
 
-  <div id="controls">
-    <button id="leftBtn">◀</button>
-    <button id="shootBtn">●</button>
-    <button id="rightBtn">▶</button>
+  <!-- Wrapper holds game + controls -->
+  <div id="wrapper">
+    <!-- Game area -->
+    <div id="gameContainer">
+      <!-- Start screen overlay -->
+      <div id="startScreen">
+        <h1>Water Molecule Popper</h1>
+        <button id="startBtn">Start</button>
+      </div>
+
+      <!-- Canvas -->
+      <canvas id="gameCanvas"></canvas>
+    </div>
+
+    <!-- Controls -->
+    <div id="controls">
+      <button id="leftBtn">◀</button>
+      <button id="shootBtn">●</button>
+      <button id="rightBtn">▶</button>
+    </div>
   </div>
 
   <script src="script.js"></script>

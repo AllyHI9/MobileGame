@@ -1,11 +1,17 @@
 (() => {
   const canvas = document.getElementById("gameCanvas");
   const ctx = canvas.getContext("2d", { alpha: false });
+
   const levelText = document.getElementById("levelText");
   const scoreEl = document.getElementById("score");
   const leftBtn = document.getElementById("leftBtn");
   const rightBtn = document.getElementById("rightBtn");
   const shootBtn = document.getElementById("shootBtn");
+
+  const startScreen = document.getElementById("startScreen");
+  const startBtn = document.getElementById("startBtn");
+
+  let gameStarted = false;
 
   let W = 360, H = 480;
   function resizeCanvas() {
@@ -55,6 +61,7 @@
     levelText.textContent = `Level ${level}`;
   }
 
+  // Controls
   leftBtn.onmousedown = () => (player.vx = -1);
   rightBtn.onmousedown = () => (player.vx = 1);
   leftBtn.onmouseup = rightBtn.onmouseup = () => (player.vx = 0);
@@ -65,10 +72,12 @@
   shootBtn.ontouchstart = e => { e.preventDefault(); shoot(); };
 
   function shoot() {
+    if (!gameStarted) return;
     pellets.push({ x: player.x, y: player.y - player.r - 6, vx: (Math.random() - 0.5) * 2, vy: -14, r: 6, life: 0 });
     player.jiggle = 1;
   }
 
+  // Sound
   let audioCtx;
   function crow() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -89,6 +98,7 @@
     crow();
   }
 
+  // Collision helpers
   function pointSegmentDistance(px, py, x1, y1, x2, y2) {
     const dx = x2 - x1, dy = y2 - y1, len2 = dx * dx + dy * dy;
     if (len2 === 0) return { dist: Math.hypot(px - x1, py - y1), nearestX: x1, nearestY: y1 };
@@ -103,13 +113,17 @@
     return { vx: vx - 2 * dot * nx, vy: vy - 2 * dot * ny };
   }
 
+  // Update
   function update(dt) {
+    if (!gameStarted) return;
+
     player.x += player.vx * player.speed * dt;
     player.x = Math.max(player.r + 8, Math.min(W - player.r - 8, player.x));
     player.jiggle = Math.max(0, player.jiggle - 0.08 * dt);
     angle += 0.003 * dt;
     waveTime += dt * 0.02;
 
+    // Pellets
     for (let i = pellets.length - 1; i >= 0; i--) {
       const p = pellets[i];
       p.life += dt / 60;
@@ -124,6 +138,7 @@
       if (p.y - p.r < top) { p.y = top + p.r; p.vy *= -0.9; }
       if (p.y + p.r > bottom) { p.y = bottom - p.r; p.vy *= -0.7; }
 
+      // Bounce off lines
       for (const [aI, bI] of connections) {
         const a = rotatedPos(molecules[aI]);
         const b = rotatedPos(molecules[bI]);
@@ -138,19 +153,21 @@
         }
       }
 
+      // Hit bubbles
       for (const m of molecules) {
         if (m.state !== "idle") continue;
         const pos = rotatedPos(m);
         if (Math.hypot(p.x - pos.x, p.y - pos.y) < p.r + m.r) {
           m.state = "pop"; spawnBird(pos.x, pos.y - 20);
-          score += 10; // ✅ ensures +10 per bubble
-          pellets.splice(i, 1); break;
+          score += 10;
+          pellets.splice(i, 1);
+          break;
         }
       }
     }
 
+    // Bubble + Bird updates
     for (const m of molecules) if (m.state === "pop") { m.t += dt; if (m.t > 30) m.state = "popped"; }
-
     for (const b of birds) b.t += dt;
     for (let i = birds.length - 1; i >= 0; i--) if (birds[i].t > 40) birds.splice(i, 1);
 
@@ -168,6 +185,7 @@
     return { x: cx + dx * c - dy * s, y: cy + dx * s + dy * c };
   }
 
+  // Draw
   function draw() {
     ctx.clearRect(0, 0, W, H);
     drawWaves(); drawConnections(); molecules.forEach(drawMolecule);
@@ -252,6 +270,7 @@
     ctx.restore();
   }
 
+  // Main Loop
   let last = performance.now();
   function loop(now) {
     const dt = Math.min(40, now - last) / 16.666;
@@ -261,16 +280,24 @@
     requestAnimationFrame(loop);
   }
 
-    // Make HUD text float gently up and down
+  // Start screen handler
+  startBtn.addEventListener("click", () => {
+    startScreen.classList.add("hidden");
+    setTimeout(() => {
+      startScreen.style.display = "none";
+      gameStarted = true;
+      generateLevel(level);
+      requestAnimationFrame(loop);
+    }, 800);
+  });
+
+  // Floating HUD animation
   const hud = document.getElementById("hud");
   function animateHUD() {
     const t = performance.now() * 0.0015;
-    const offset = Math.sin(t) * 5; // ±5px float
+    const offset = Math.sin(t) * 5;
     hud.style.transform = `translateY(${offset}px)`;
     requestAnimationFrame(animateHUD);
   }
   animateHUD();
-
-  generateLevel(level);
-  requestAnimationFrame(loop);
 })();

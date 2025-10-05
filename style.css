@@ -1,19 +1,26 @@
+/* === Base Layout === */
 html, body {
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
-  background: linear-gradient(to bottom, #bde3ff, #a0d0ff, #6dbdff);
   display: flex;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(to bottom, #bde3ff, #6dbdff);
   font-family: 'Trebuchet MS', sans-serif;
-  touch-action: manipulation;
-  user-select: none;
 }
 
-/* Container ensures centered layout */
+/* Centers everything vertically and horizontally */
+#wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* === Game Area === */
 #gameContainer {
   position: relative;
   width: 100%;
@@ -22,17 +29,63 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
+  background: transparent;
 }
 
+/* Canvas */
 #gameCanvas {
   width: 100%;
   height: 100%;
-  background: transparent;
   display: block;
   border-radius: 12px;
   box-shadow: 0 0 25px rgba(50, 160, 255, 0.25);
 }
 
+/* === Start Screen Overlay === */
+#startScreen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #FFF7E1; /* ✅ Calming blue-gray */
+  border-radius: 12px;
+  box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.15);
+  z-index: 10;
+  transition: opacity 0.8s ease;
+}
+
+#startScreen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#startScreen h1 {
+  font-size: 2em;
+  color: #77A8BB;
+  text-shadow: 0 0 8px rgba(255,255,255,0.8);
+  margin-bottom: 24px;
+}
+
+#startBtn {
+  background: #f9b718; /* Charity: Water yellow */
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 36px;
+  font-size: 1.4em;
+  font-weight: bold;
+  box-shadow: 0 0 12px rgba(255, 200, 0, 0.5);
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+#startBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 18px rgba(255, 210, 50, 0.8);
+}
+
+/* === HUD === */
 #hud {
   position: absolute;
   top: 10px;
@@ -42,37 +95,32 @@ html, body {
   justify-content: space-between;
   padding: 0 20px;
   color: #000000;
-  text-shadow: 0 0 8px #6ee0ff;
-  font-weight: bolder;
+  text-shadow: 0 0 8px #b3b3b3;
+  font-weight: bold;
   font-size: 18px;
   pointer-events: none;
   z-index: 5;
 }
-#charityLogo {
-  height: 150px;
-  object-fit: contain;
-  margin-top: -63px;
-  filter: drop-shadow(0 0 6px rgba(255,255,255,0.7));
-  transition: transform 0.3s ease;
-}
+ #charityLogo {
+    height: 150px;
+    object-fit: contain;
+    margin-top: -63px;
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.7));
+    transition: transform 0.3s ease;
+ }
 
 #charityLogo:hover {
   transform: scale(1.05);
+  transition: transform 0.3s ease;
 }
 
-@media (max-width: 480px) {
-  #charityLogo {
-    height: 45px;
-  }
-}
-
+/* === Controls === */
 #controls {
-  position: absolute;
-  bottom: 10px;
-  width: 100%;
+  margin-top: 10px;
   display: flex;
   justify-content: center;
   gap: 15px;
+  width: 100%;
   max-width: 420px;
 }
 
@@ -91,4 +139,22 @@ html, body {
 #controls button:active {
   transform: scale(0.9);
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+}
+
+/* === Responsive === */
+@media (max-width: 480px) {
+  #startScreen h1 {
+    font-size: 1.6em;
+  }
+
+  #startBtn {
+    padding: 12px 28px;
+    font-size: 1.1em;
+  }
+
+  #controls button {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+  }
 }
