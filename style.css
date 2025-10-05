@@ -48,6 +48,23 @@ html, body {
   pointer-events: none;
   z-index: 5;
 }
+#charityLogo {
+  height: 150px;
+  object-fit: contain;
+  margin-top: -63px;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.7));
+  transition: transform 0.3s ease;
+}
+
+#charityLogo:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 480px) {
+  #charityLogo {
+    height: 45px;
+  }
+}
 
 #controls {
   position: absolute;
