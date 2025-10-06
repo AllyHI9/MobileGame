@@ -69,7 +69,7 @@ html, body {
 }
 
 #startBtn {
-  background: #f9b718; /* Charity: Water yellow */
+  background: #FFC907; /* Charity: Water yellow */
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -87,8 +87,9 @@ html, body {
 
 /* --- Mission Text --- */
 .missionText {
-  color: #fff;
+  color: #77A8BB;
   font-size: 1em;
+  font-weight: bolder;
   text-align: center;
   max-width: 300px;
   line-height: 1.4;
@@ -99,9 +100,9 @@ html, body {
   justify-content: center;
 }
 .missionText a {
-  color: #f9b718;
+  color: #77A8BB;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: bolder;
 
 }
 .missionText a:hover {
@@ -116,7 +117,7 @@ html, body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: rgba(119, 168, 187, 0.95);
+  background: #FFF7E1;
   border-radius: 12px;
   box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.15);
   z-index: 12;
@@ -130,13 +131,14 @@ html, body {
 
 #endScreen h1 {
   font-size: 2em;
-  color: #fff;
-  text-shadow: 0 0 8px rgba(255,255,255,0.8);
+  color: #003366;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
   margin-bottom: 12px;
 }
 
 #finalScore {
-  color: #e9faff;
+  color: #003366;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
   font-size: 1.2em;
   margin-bottom: 20px;
 }

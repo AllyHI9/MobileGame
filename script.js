@@ -10,8 +10,12 @@
 
   const startScreen = document.getElementById("startScreen");
   const startBtn = document.getElementById("startBtn");
+  const endScreen = document.getElementById("endScreen");
+  const restartBtn = document.getElementById("restartBtn");
+  const finalScore = document.getElementById("finalScore");
 
   let gameStarted = false;
+  let gameEnded = false;
 
   let W = 360, H = 480;
   function resizeCanvas() {
@@ -29,6 +33,10 @@
   let score = 0, level = 1, angle = 0, waveTime = 0;
 
   function generateLevel(num) {
+    if (num > 5) {
+      showEndScreen();
+      return;
+    }
     resizeCanvas();
     W = canvas.width / (window.devicePixelRatio || 1);
     H = canvas.height / (window.devicePixelRatio || 1);
@@ -58,7 +66,7 @@
     player.x = cx;
     player.y = H - 100;
     player.r = Math.min(W, H) * 0.045;
-    levelText.textContent = `Level ${level}`;
+  levelText.textContent = `Level ${level}`;
   }
 
   // Controls
@@ -75,6 +83,22 @@
     if (!gameStarted) return;
     pellets.push({ x: player.x, y: player.y - player.r - 6, vx: (Math.random() - 0.5) * 2, vy: -14, r: 6, life: 0 });
     player.jiggle = 1;
+    splashSound();
+  }
+
+  // Splash sound for shooting
+  function splashSound() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctxA = audioCtx;
+    const o = ctxA.createOscillator();
+    const g = ctxA.createGain();
+    o.type = "triangle";
+    o.frequency.setValueAtTime(340 + Math.random() * 60, ctxA.currentTime);
+    o.frequency.linearRampToValueAtTime(180, ctxA.currentTime + 0.13);
+    g.gain.setValueAtTime(0.13, ctxA.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctxA.currentTime + 0.14);
+    o.connect(g); g.connect(ctxA.destination);
+    o.start(); o.stop(ctxA.currentTime + 0.15);
   }
 
   // Sound
@@ -115,7 +139,7 @@
 
   // Update
   function update(dt) {
-    if (!gameStarted) return;
+    if (!gameStarted || gameEnded) return;
 
     player.x += player.vx * player.speed * dt;
     player.x = Math.max(player.r + 8, Math.min(W - player.r - 8, player.x));
@@ -172,7 +196,8 @@
     for (let i = birds.length - 1; i >= 0; i--) if (birds[i].t > 40) birds.splice(i, 1);
 
     if (molecules.every(m => m.state === "popped")) {
-      level++; generateLevel(level);
+      level++;
+      generateLevel(level);
     }
 
     scoreEl.textContent = `Score: ${score}`;
@@ -285,11 +310,34 @@
     startScreen.classList.add("hidden");
     setTimeout(() => {
       startScreen.style.display = "none";
+      endScreen.classList.add("hidden");
+      endScreen.style.display = "none";
       gameStarted = true;
+      gameEnded = false;
+      level = 1;
+      score = 0;
       generateLevel(level);
       requestAnimationFrame(loop);
     }, 800);
   });
+
+  // End screen handler
+  restartBtn.addEventListener("click", () => {
+    endScreen.classList.add("hidden");
+    setTimeout(() => {
+      endScreen.style.display = "none";
+      startScreen.classList.remove("hidden");
+      startScreen.style.display = "flex";
+    }, 800);
+  });
+
+  function showEndScreen() {
+    gameStarted = false;
+    gameEnded = true;
+    finalScore.textContent = `Final Score: ${score}`;
+    endScreen.classList.remove("hidden");
+    endScreen.style.display = "flex";
+  }
 
   // Floating HUD animation
   const hud = document.getElementById("hud");
