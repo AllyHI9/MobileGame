@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Water Molecule Popper</title>
+  <title>Water Molecule Pop</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <!-- HUD (Level + Score + Logo) -->
   <div id="hud">
     <div id="levelText" class="hudText">Level 1</div>
-    <img id="charityLogo" src="charity-water-logo-png_seeklogo-618081.png" alt="Charity Water Logo">
+    <img id="charityLogo" src="charity-water-logo-png_seeklogo-618081.png" alt="Charity Water Logo" />
     <div id="score" class="hudText">Score: 0</div>
   </div>
 
@@ -18,10 +18,25 @@
   <div id="wrapper">
     <!-- Game area -->
     <div id="gameContainer">
-      <!-- Start screen overlay -->
+      <!-- Start Screen -->
       <div id="startScreen">
-        <h1>Water Molecule Popper</h1>
+        <h1>Water Molecule Pop</h1>
+        <p class="missionText">
+          Every drop makes a difference.
+          <a href="https://charitywater.org" target="_blank">Learn more →</a>
+        </p>
         <button id="startBtn">Start</button>
+      </div>
+
+      <!-- End Screen -->
+      <div id="endScreen" class="hidden">
+        <h1>Congratulations!</h1>
+        <p id="finalScore"></p>
+        <p class="missionText">
+          You’ve helped spread clean water to the world.<br />
+          <a href="https://charitywater.org" target="_blank">Learn more or donate →</a>
+        </p>
+        <button id="restartBtn">Play Again</button>
       </div>
 
       <!-- Canvas -->

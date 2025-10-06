@@ -85,6 +85,79 @@ html, body {
   box-shadow: 0 0 18px rgba(255, 210, 50, 0.8);
 }
 
+/* --- Mission Text --- */
+.missionText {
+  color: #fff;
+  font-size: 1em;
+  text-align: center;
+  max-width: 300px;
+  line-height: 1.4;
+  margin: 0 auto 20px auto; /* centers block */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.missionText a {
+  color: #f9b718;
+  text-decoration: none;
+  font-weight: bold;
+
+}
+.missionText a:hover {
+  text-decoration: underline;
+}
+
+/* --- End Screen --- */
+#endScreen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(119, 168, 187, 0.95);
+  border-radius: 12px;
+  box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.15);
+  z-index: 12;
+  transition: opacity 0.8s ease;
+}
+
+#endScreen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#endScreen h1 {
+  font-size: 2em;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255,255,255,0.8);
+  margin-bottom: 12px;
+}
+
+#finalScore {
+  color: #e9faff;
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+#restartBtn {
+  background: #f9b718;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 36px;
+  font-size: 1.3em;
+  font-weight: bold;
+  box-shadow: 0 0 12px rgba(255, 200, 0, 0.5);
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+#restartBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 18px rgba(255, 210, 50, 0.8);
+}
+
+
 /* === HUD === */
 #hud {
   position: absolute;
