@@ -7,11 +7,12 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- HUD (Level + Score + Logo) -->
+  <!-- HUD (Level + Score + Timer + Logo) -->
   <div id="hud">
     <div id="levelText" class="hudText">Level 1</div>
-    <img id="charityLogo" src="charity-water-logo-png_seeklogo-618081.png" alt="Charity Water Logo" />
     <div id="score" class="hudText">Score: 0</div>
+    <div id="timer" class="hudText">Time: 1:30</div>
+    <img id="charityLogo" src="charity-water-logo-png_seeklogo-618081.png" alt="Charity Water Logo" />
   </div>
 
   <!-- Wrapper holds game + controls -->
@@ -25,21 +26,28 @@
           Every drop makes a difference.
           <a href="https://charitywater.org" target="_blank">Learn more →</a>
         </p>
-        <button id="startBtn">Start</button>
+        <!-- Difficulty Selection -->
+        <div id="difficultySelect" class="difficulty-container">
+          <button class="difficulty-btn" data-mode="easy">Easy</button>
+          <button class="difficulty-btn selected" data-mode="normal">Normal</button>
+          <button class="difficulty-btn" data-mode="hard">Hard</button>
+        </div>
+        <button id="startBtn">Start Game</button>
       </div>
 
       <!-- End Screen -->
       <div id="endScreen" class="hidden">
-        <h1>Congratulations!</h1>
+        <canvas id="confettiCanvas"></canvas>
+        <h1>Game Over!</h1>
         <p id="finalScore"></p>
         <p class="missionText">
           You’ve helped spread clean water to the world.<br />
           <a href="https://charitywater.org" target="_blank">Learn more or donate →</a>
         </p>
-        <button id="restartBtn">Play Again</button>
+        <button id="restartBtn">Restart Game</button>
       </div>
 
-      <!-- Canvas -->
+      <!-- Game Canvas -->
       <canvas id="gameCanvas"></canvas>
     </div>
 
@@ -50,6 +58,15 @@
       <button id="rightBtn">▶</button>
     </div>
   </div>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="footer-content">
+      <a href="https://charitywater.org" target="_blank" class="footer-link">Charity: Water Home</a>
+      <span class="footer-sep">|</span>
+      <a href="https://charitywater.org/donate" target="_blank" class="footer-link">Donate</a>
+    </div>
+  </footer>
 
   <script src="script.js"></script>
 </body>
