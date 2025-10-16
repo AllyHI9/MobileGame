@@ -134,6 +134,22 @@
 
   function spawnBird(x, y) {
     birds.push({x,y,t:0});
+    crow();
+  }
+
+  // Crow sound effect
+  function crow() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctxA = audioCtx;
+    const o = ctxA.createOscillator();
+    const g = ctxA.createGain();
+    o.type = "square";
+    o.frequency.setValueAtTime(450, ctxA.currentTime);
+    o.frequency.linearRampToValueAtTime(260, ctxA.currentTime + 0.2);
+    g.gain.setValueAtTime(0.1, ctxA.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctxA.currentTime + 0.4);
+    o.connect(g); g.connect(ctxA.destination);
+    o.start(); o.stop(ctxA.currentTime + 0.4);
   }
 
   function pointSegmentDistance(px,py,x1,y1,x2,y2) {
@@ -164,7 +180,8 @@
       timer -= dt / 60;
     } else {
       timer = 0;
-      showEndScreen();
+      showFailScreen();
+      return;
     }
     const minutes = Math.floor(timer / 60);
     const seconds = Math.floor(timer % 60).toString().padStart(2, "0");
@@ -221,8 +238,18 @@
         scoreEl.classList.remove("flash-red");
         void scoreEl.offsetWidth;
         scoreEl.classList.add("flash-red");
+    playOwSound();
         setTimeout(() => { scoreEl.classList.remove("flash-red"); }, 2000);
-        if (score <= 0) showEndScreen();
+        if (score <= 0) {
+          showFailScreen();
+          return;
+        }
+    // Play ow sound when taking damage
+    function playOwSound() {
+      const audio = new Audio('vine-boom-162668.mp3');
+      audio.volume = 0.7;
+      audio.play();
+    }
       }
     }
 
@@ -288,6 +315,8 @@
       startScreen.style.display="none";
       endScreen.classList.add("hidden");
       endScreen.style.display="none";
+      failScreen.classList.add("hidden");
+      failScreen.style.display="none";
       gameStarted=true;
       gameEnded=false;
       level=1;
@@ -298,7 +327,7 @@
     }, 300);
   });
 
-  // Restart button
+  // Restart button (end screen)
   restartBtn.addEventListener("click", ()=>{
     endScreen.classList.add("hidden");
     setTimeout(()=>{
@@ -307,6 +336,25 @@
       startScreen.style.display="flex";
     }, 300);
   });
+
+  // Restart button (fail screen)
+  const failScreen = document.getElementById("failScreen");
+  const failRestartBtn = document.getElementById("failRestartBtn");
+  failRestartBtn.addEventListener("click", ()=>{
+    failScreen.classList.add("hidden");
+    setTimeout(()=>{
+      failScreen.style.display="none";
+      startScreen.classList.remove("hidden");
+      startScreen.style.display="flex";
+    }, 300);
+  });
+
+  function showFailScreen() {
+    gameStarted = false;
+    gameEnded = true;
+    failScreen.classList.remove("hidden");
+    failScreen.style.display = "flex";
+  }
 
   function showEndScreen(){
     gameStarted=false;
