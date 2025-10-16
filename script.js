@@ -109,6 +109,24 @@
   shootBtn.onclick = shoot;
   shootBtn.ontouchstart = e => { e.preventDefault(); shoot(); };
 
+  // Keyboard controls
+  window.addEventListener('keydown', (e) => {
+    if (!gameStarted || gameEnded) return;
+    if (e.code === 'ArrowLeft') {
+      player.vx = -1;
+    } else if (e.code === 'ArrowRight') {
+      player.vx = 1;
+    } else if (e.code === 'Space') {
+      shoot();
+    }
+  });
+  window.addEventListener('keyup', (e) => {
+    if (!gameStarted || gameEnded) return;
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+      player.vx = 0;
+    }
+  });
+
   function shoot() {
     if (!gameStarted) return;
     pellets.push({ x: player.x, y: player.y - player.r - 6, vx: (Math.random()-0.5)*2, vy:-14, r:6, life:0 });
